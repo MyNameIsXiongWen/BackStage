@@ -5,14 +5,20 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         navindex: 0,
-        navDataList: ['111','222']
+        navDataList: []
     },
     mutations: {
         selectnav (state, payload) {
             state.navindex = payload;
         },
-        add (state, payload) {
+        addHistory (state, payload) {
+            if (state.navDataList.indexOf(payload) !== -1) {
+                state.navDataList.splice(state.navDataList.indexOf(payload), 1);
+            }
             state.navDataList.push(payload);
+        },
+        deleteHistory (state, payload) {
+            state.navDataList.splice(payload, 1);
         }
     },
     getters: {

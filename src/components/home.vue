@@ -1,11 +1,10 @@
 <template>
     <div class="container">
         <appHeader></appHeader>
-        <div class="contain-main">
-            <appSide></appSide>
-            <div class="contentHeader">
-                <contentHeader></contentHeader>
-            </div>
+        <appSide></appSide>
+        <div class="content">
+            <contentHeader></contentHeader>
+            <baseInfo></baseInfo>
         </div>
     </div>
 </template>
@@ -14,12 +13,14 @@
 import appHeader from './header'
 import appSide from './side'
 import contentHeader from './contentHeader'
+import baseInfo from './baseInfo'
 export default {
     name: 'home',
     components: {
         appHeader,
         appSide,
-        contentHeader
+        contentHeader,
+        baseInfo
     }
 }
 </script>
@@ -34,9 +35,7 @@ export default {
     height: 100%;
     overflow: hidden;
 }
-.contentHeader {
-    margin-left: 200px;
-    margin-top: 60px;
-    background-color: #f6f6f6;
+.content {
+    margin: 70px 20px 0 220px;
 }
 </style>

@@ -239,12 +239,17 @@ export default {
                         ]
                     }
                 ]
-            ]
+            ],
+            currentInex: 0
         }
     },
     methods: {
         clickli(index) {
             this.datalist[this.navindex][index].isshow = !this.datalist[this.navindex][index].isshow;
+            this.currentInex = index;
+        },
+        clicksubli(tag) {
+            this.$store.commit("addHistory", this.datalist[this.navindex][this.currentInex].subitem[tag].title);
         }
     },
     computed: {
@@ -280,6 +285,7 @@ i {
     height: 100%;
     width: 200px;
     border-right: solid 1px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 .side li {
     line-height: 55px;

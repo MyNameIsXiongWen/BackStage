@@ -43,6 +43,7 @@ export default {
 
 <style>
 header {
+position: fixed;
 float: left;
 color: white;
 width: 100%;
