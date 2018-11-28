@@ -4,7 +4,7 @@
         <appSide></appSide>
         <div class="content">
             <contentHeader></contentHeader>
-            <baseInfo></baseInfo>
+            <router-view></router-view>
         </div>
     </div>
 </template>
@@ -13,14 +13,12 @@
 import appHeader from './header'
 import appSide from './side'
 import contentHeader from './contentHeader'
-import baseInfo from './baseInfo'
 export default {
     name: 'home',
     components: {
         appHeader,
         appSide,
-        contentHeader,
-        baseInfo
+        contentHeader
     }
 }
 </script>

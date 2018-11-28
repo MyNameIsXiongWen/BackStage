@@ -28,7 +28,7 @@ export default {
                         thumb: '',
                         isshow: false,
                         subitem: [
-                            {title: '基础信息'}
+                            {title: '基础信息',url: '/components/baseInfo'}
                         ]
                     }
                 ],
@@ -37,6 +37,7 @@ export default {
                          title: '商品类目',
                          thumb: '',
                          isshow: false,
+                         url: '/components/goodsManage',
                          subitem:[]
                     },
                     {
@@ -247,9 +248,13 @@ export default {
         clickli(index) {
             this.datalist[this.navindex][index].isshow = !this.datalist[this.navindex][index].isshow;
             this.currentInex = index;
+            if (this.datalist[this.navindex][index].url) {
+                this.$router.push(this.datalist[this.navindex][index].url);
+            }
         },
         clicksubli(tag) {
             this.$store.commit("addHistory", this.datalist[this.navindex][this.currentInex].subitem[tag].title);
+            this.$router.push(this.datalist[this.navindex][this.currentInex].subitem[tag].url);
         }
     },
     computed: {
