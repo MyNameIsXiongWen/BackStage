@@ -12,7 +12,7 @@
             </ul>
             </div>
             <div class="userinfo">
-                <img src="../assets/avatar.png" alt="">
+                <img src="@/assets/images/avatar.png" alt="">
                 <span @click="displayUserInfo">超管<i></i></span>
             </div>
         </div>

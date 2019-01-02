@@ -1,17 +1,28 @@
 <template>
     <div class="side">
-        <ul>
-            <li v-for="(data,index) in datalist[navindex]" :key=index @click="clickli(index)">
-                <i>{{data.thumb}}</i>
-                {{data.title}}
-                <span v-if="data.subitem.length>0"></span>
-                <ul v-show="data.isshow">
-                    <li v-for="(subdata, tag) in data.subitem" :key=tag @click="clicksubli(tag)">
-                        {{subdata.title}}
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <el-menu @open="handleOpen" @close="handleClose" router>
+            <div v-for="(data,index) in datalist[navindex]" :key=index>
+                <el-submenu v-if="data.subitem.length>0" :index="data.title">
+                    <template slot="title">
+                        <i>{{data.thumb}}</i>
+                        <span>{{data.title}}</span>
+                    </template>
+                    <el-menu-item 
+                    v-for="(subData, subIndex) in data.subitem" 
+                    :key=subIndex 
+                    :index="subData.title"
+                    :route='subData.url'
+                    @click="clickMenuItem(subData.url, subData.title)">
+                        <i>{{subData.thumb}}</i>
+                        <span slot="title">{{subData.title}}</span>
+                    </el-menu-item>
+                </el-submenu>
+                <el-menu-item v-else :index="data.title" @click="clickMenuItem(data.url, data.title)" :route='data.url'>
+                        <i>{{data.thumb}}</i>
+                    <span slot="title">{{data.title}}</span>
+                </el-menu-item>
+            </div>
+        </el-menu>
     </div>
 </template>
 
@@ -28,7 +39,7 @@ export default {
                         thumb: '',
                         isshow: false,
                         subitem: [
-                            {title: '基础信息',url: '/components/baseInfo'}
+                            {title: '基础信息',url: './baseInfo'}
                         ]
                     }
                 ],
@@ -37,7 +48,7 @@ export default {
                          title: '商品类目',
                          thumb: '',
                          isshow: false,
-                         url: '/components/goodsManage',
+                         url: './goodsManage',
                          subitem:[]
                     },
                     {
@@ -238,6 +249,15 @@ export default {
                         subitem:[
                             {title: '仓库信息'}
                         ]
+                    },
+                    {
+                        title: '采购购理',
+                        thumb: '',
+                        isshow: false,
+                        subitem:[
+                            {title: '提货单', url: '/provideManage/deliveryOrder'},
+                            {title: '提货需求池', url: '/provideManage/deliveryDemand'}
+                        ]
                     }
                 ]
             ],
@@ -245,16 +265,17 @@ export default {
         }
     },
     methods: {
-        clickli(index) {
-            this.datalist[this.navindex][index].isshow = !this.datalist[this.navindex][index].isshow;
-            this.currentInex = index;
-            if (this.datalist[this.navindex][index].url) {
-                this.$router.push(this.datalist[this.navindex][index].url);
-            }
+        handleOpen (key, keyPath) {
+            // console.log(key, keyPath)
         },
-        clicksubli(tag) {
-            this.$store.commit("addHistory", this.datalist[this.navindex][this.currentInex].subitem[tag].title);
-            this.$router.push(this.datalist[this.navindex][this.currentInex].subitem[tag].url);
+        handleClose (key, keyPath) {
+            // console.log(key, keyPath)
+        },
+        clickMenuItem (url, title) {
+            this.$store.commit("addHistory", title);
+            if (url) {
+                this.$router.push(url);
+            }
         }
     },
     computed: {
@@ -274,15 +295,6 @@ export default {
     font-weight: normal;
     font-style: normal;
 }
-i,
-span {
-    font-family: icomoon;
-    font-weight: normal;
-    font-style: normal;
-}
-i {
-    padding-right: 5px;
-}
 .side {
     position: fixed;
     left: 0;
@@ -292,22 +304,13 @@ i {
     border-right: solid 1px rgba(0, 0, 0, 0.1);
     background-color: white;
 }
-.side li {
-    line-height: 55px;
-    list-style: none;
-    padding: 0 20px;
-    cursor: pointer;
+i {
+    font-family: icomoon;
+    font-weight: normal;
+    font-style: normal;
+    padding-right: 10px;
 }
-.side li li {
-    padding: 0;
-}
-.side li span {
-    float: right;
-}
-.side li:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-}
-.side li li:hover {
-    background-color: rgba(0, 0, 0, 0);
+.el-menu {
+    border: none;
 }
 </style>

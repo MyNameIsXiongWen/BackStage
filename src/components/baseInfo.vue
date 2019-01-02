@@ -1,45 +1,71 @@
 <template>
-    <div>
-        <div class="search-top" @click="clickBottom()">
-            <p>用户信息搜索</p>
-            <span>⬇️</span>
+    <div class="base-info">
+        <el-collapse v-model="active" accortion class="block-area">
+                <el-collapse-item :name="1">
+                    <template slot="title">
+                        <span>用户信息搜索</span>
+                    </template>
+                    <div class="block-search">
+                        <div class="search-input">
+                            <span>昵称：</span>
+                            <el-input placeholder="请输入昵称"></el-input>
+                        </div>
+                        <div class="search-input">
+                            <span>手机号：</span>
+                            <el-input placeholder="请输入手机号"></el-input>
+                        </div>
+                        <div class="search-input">
+                            <el-button class="btn-padding" type="primary" @click="searchDemand">搜索</el-button>
+                        </div>
+                    </div>
+                </el-collapse-item>
+            </el-collapse>
+        <div class="block-area">
+            <div class="block-title">
+                <el-button type="success">新增用户</el-button>
+            </div>
+            <el-table :data="datalist" stripe>
+                <el-table-column label="头像" prop="avatar">
+                    <template slot-scope="scope">
+                        <img class="avatar" :src="scope.row.avatar" :alt="scope.row.name">
+                    </template>
+                </el-table-column>
+                <el-table-column label="昵称" prop="name"></el-table-column>
+                <el-table-column label="手机号" prop="phone"></el-table-column>
+                <el-table-column label="邮箱" prop="email"></el-table-column>
+                <el-table-column label="介绍" prop="introduce"></el-table-column>
+                <el-table-column label="定位城市" prop="city">
+                    <template slot-scope="scope">
+                        {{scope.row.city + '市'}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="性别" prop="sex">
+                    <template slot-scope="scope">
+                        {{scope.row.sex == 1 ? '男' : scope.row.sex == 0 ? '女' : '保密'}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否禁用" prop="isForbidden">
+                    <template slot-scope="scope">
+                        {{scope.row.isForbidden ? '禁用' : '启用'}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="text" class="">编辑</el-button>
+                        <el-button type="text" class="delete-text">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
-        <div class="search-bottom" v-if=isshow>
-                <span>昵称:</span><input type="text">
-                <span>手机号:</span><input type="text">
-                <button>搜索</button>
-        </div>
-        <div class="info">
-            <button>新增用户</button>
-            <span></span>
-            <table>
-                <tr>
-                    <th>头像</th>
-                    <th>昵称</th>
-                    <th>手机号</th>
-                    <th>邮箱</th>
-                    <th>介绍</th>
-                    <th>定位城市</th>
-                    <th>性别</th>
-                    <th>是否禁用</th>
-                    <th>操作</th>
-                </tr>
-                <tr v-for="(data, index) in datalist" :key=index>
-                    <td width="150px"><img :src="data.avatar"></td>
-                    <td width="150px">{{data.name}}</td>
-                    <td width="150px">{{data.phone}}</td>
-                    <td width="180px">{{data.email}}</td>
-                    <td width="180px">{{data.introduce}}</td>
-                    <td width="150px">{{data.city}}市</td>
-                    <td width="150px">{{data.sex === 1 ? '男' : '女'}}</td>
-                    <td width="150px">{{data.isForbidden ? '是' : '否'}}</td>
-                    <td width="180px">
-                        <button>编辑</button>
-                        <button>删除</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
+        <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageData.currentPage"
+        :page-sizes="pageData.pageSizes"
+        :page-size="pageData.pageSize"
+        :total="pageData.total"
+        layout="total, sizes, prev, pager, next, jumper">
+        </el-pagination>
     </div>
 </template>
 
@@ -76,7 +102,7 @@ export default {
                     email: 'ffdf@qq.com',
                     introduce: '暂无资料',
                     city: '苏州',
-                    sex: 2,
+                    sex: 0,
                     isForbidden: true
                 },
                 {
@@ -110,133 +136,32 @@ export default {
                     isForbidden: false
                 }
             ],
-            isshow:true
+            active: 1,
+            pageData: {
+                currentPage: 1,
+                pageSize: 10,
+                pageSizes: [10, 15, 20, 50, 100],
+                total: 6
+            }
         }
     },
     methods: {
-        clickBottom() {
-            this.isshow = !this.isshow;
+        searchDemand () {
+
+        },
+        handleSizeChange () {
+
+        },
+        handleCurrentChange () {
+
         }
     }
 }
 </script>
 
-<style>
-.search-top {
-    height: 70px;
-    line-height: 70px;
-    background-color: white;
-    margin-top: 15px;
-    border-radius: 10px 10px 0 0;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+<style lang="scss">
+.avatar {
+  width: 80px;
+  height: 80px;
 }
-.search-top p {
-    float: left;
-    margin-left: 30px;
-}
-.search-top span {
-    float: right;
-    margin-right: 30px;
-}
-.search-bottom {
-    background-color: white;
-    border-top: solid 1px #f6f6f6;
-    padding: 15px 0 0 40px;
-    height: 80px;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-.search-bottom span {
-    font-size: 14px;
-    padding-left: 45px;
-    padding-right: 15px;
-}
-.search-bottom input {
-    height: 40px;
-    width: 230px;
-    border-radius: 5px;
-    border: solid 1px lightgray;
-    padding-left: 15px;
-    box-sizing: border-box;
-}
-.search-bottom input:hover {
-    border: solid 1px blue;
-}
-.search-bottom button {
-    background-color: blue;
-    width: 90px;
-    height: 40px;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    font-size: 15px;
-    margin-left: 110px;
-}
-
-input,
-button {
-    outline: none;
-}
-
-.info {
-    background-color: white;
-    margin: 15px 0;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-.info > button {
-    margin: 15px 0 0 30px;
-    font-size: 15px;
-    height: 40px;
-    padding: 0 20px;
-    background-color: green;
-    color: white;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-}
-.info span {
-    display: inline-block;
-    width: 100%;
-    background-color: #f6f6f6;
-    height: 1px;
-}
-.info table {
-    border-collapse: collapse;
-}
-.info th {
-    padding: 15px 0;
-    color: #999;
-    font-weight: 400;
-}
-.info td {
-    height: 100px;
-    text-align: center;
-    font-size: 14px;
-    color: #333;
-    border-top: solid 1px #f6f6f6;
-    box-sizing: border-box;
-}
-.info td img {
-    width: 80px;
-    height: 80px;
-    margin-top: 5px;
-}
-.info td button {
-    background-color: transparent;
-    border: none;
-    font-size: 14px;
-    padding: 5px 5px;
-}
-.info td button:first-child {
-    color: blue;
-}
-.info td button:last-child {
-    color: red;
-}
-.info td button:hover {
-    cursor: pointer;
-}
-
 </style>

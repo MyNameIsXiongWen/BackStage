@@ -8,36 +8,37 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: '初始页',
       component: Home
     },
     {
       path: '/home',
-      name: 'home',
+      name: '首页',
       component: Home
     },
     {
-      path: '/components',
-      name: '',
+      path: '/goodsManage',
+      name: '用户管理',
       component: Home,
       children: [
-        {
-          path: 'baseInfo',
-          component: () => import('@/components/baseInfo.vue'),
-          name: '基础信息'
-        }
+        { path: 'baseInfo', component: () => import('../components/baseInfo.vue'), name: '基础信息' }
       ]
     },
     {
       path: '/components',
-      name: '',
+      name: '商城管理',
       component: Home,
       children: [
-        {
-          path: 'goodsManage',
-          component: () => import('@/components/goodsManage.vue'),
-          name: '商品类目'
-        }
+        { path: 'goodsManage', component: () => import('../components/goodsManage.vue'), name: '商品类目' }
+      ]
+    },
+    {
+      path: '/provideManage',
+      name: '供应管理',
+      component: Home,
+      children: [
+        { path: 'deliveryOrder', component: () => import('../components/provideManage/deliveryOrder.vue'), name: '提货单' },
+        { path: 'deliveryDemand', component: () => import('../components/provideManage/deliveryDemand.vue'), name: '提货需求池' }
       ]
     }
   ]
