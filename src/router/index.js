@@ -9,7 +9,7 @@ export default new Router({
     {
       path: '/',
       name: '初始页',
-      component: Home
+      redirect: '/home'
     },
     {
       path: '/home',
@@ -17,7 +17,12 @@ export default new Router({
       component: Home
     },
     {
-      path: '/goodsManage',
+      path: '/login',
+      name: '登陆页',
+      component: () => import('../components/login.vue')
+    },
+    {
+      path: '/client',
       name: '用户管理',
       component: Home,
       children: [
@@ -25,12 +30,27 @@ export default new Router({
       ]
     },
     {
-      path: '/components',
+      path: '/goodsManage',
       name: '商城管理',
       component: Home,
       children: [
         { path: 'goodsManage', component: () => import('../components/goodsManage.vue'), name: '商品类目' }
       ]
+    },
+    {
+      path: '/orderManage',
+      name: '订单管理',
+      component: Home
+    },
+    {
+      path: '/activityManage',
+      name: '活动管理',
+      component: Home
+    },
+    {
+      path: '/houseManage',
+      name: '小区管理',
+      component: Home
     },
     {
       path: '/provideManage',
@@ -40,6 +60,11 @@ export default new Router({
         { path: 'deliveryOrder', component: () => import('../components/provideManage/deliveryOrder.vue'), name: '提货单' },
         { path: 'deliveryDemand', component: () => import('../components/provideManage/deliveryDemand.vue'), name: '提货需求池' }
       ]
+    },
+    {
+      path: '/systemManage',
+      name: '系统管理',
+      component: Home
     }
   ]
 })

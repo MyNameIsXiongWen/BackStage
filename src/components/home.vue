@@ -2,8 +2,8 @@
     <div class="container">
         <appHeader></appHeader>
         <appSide></appSide>
+        <contentHeader></contentHeader>
         <div class="content">
-            <contentHeader></contentHeader>
             <router-view></router-view>
         </div>
     </div>
@@ -23,7 +23,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang='scss'>
 * {
     padding: 0;
     margin: 0;
@@ -34,6 +34,6 @@ export default {
     overflow: hidden;
 }
 .content {
-    margin: 70px 20px 0 220px;
+    margin: 140px 20px 0 220px;
 }
 </style>

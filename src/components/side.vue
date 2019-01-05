@@ -1,7 +1,7 @@
 <template>
     <div class="side">
-        <el-menu @open="handleOpen" @close="handleClose" router>
-            <div v-for="(data,index) in datalist[navindex]" :key=index>
+        <el-menu @open="handleOpen" @close="handleClose">
+            <div v-for="(data,index) in datalist[navIndex]" :key=index>
                 <el-submenu v-if="data.subitem.length>0" :index="data.title">
                     <template slot="title">
                         <i>{{data.thumb}}</i>
@@ -11,13 +11,12 @@
                     v-for="(subData, subIndex) in data.subitem" 
                     :key=subIndex 
                     :index="subData.title"
-                    :route='subData.url'
                     @click="clickMenuItem(subData.url, subData.title)">
                         <i>{{subData.thumb}}</i>
                         <span slot="title">{{subData.title}}</span>
                     </el-menu-item>
                 </el-submenu>
-                <el-menu-item v-else :index="data.title" @click="clickMenuItem(data.url, data.title)" :route='data.url'>
+                <el-menu-item v-else :index="data.title" @click="clickMenuItem(data.url, data.title)">
                         <i>{{data.thumb}}</i>
                     <span slot="title">{{data.title}}</span>
                 </el-menu-item>
@@ -29,6 +28,23 @@
 <script>
 import {mapState} from 'vuex'
 export default {
+    mounted () {
+        // 判断当前浏览器地址是哪个导航栏下的
+        this.datalist.map((data, index) => {
+            data.map((subData, subIndex) => {
+                if (subData.url === this.$route.path) {
+                    this.$store.commit('selectNav', index)
+                    return
+                }
+                subData.subitem.map(subSubData => {
+                    if (subSubData.url === this.$route.path) {
+                        this.$store.commit('selectNav', index)
+                        return
+                    }
+                })
+            })
+        })
+    },
     data() {
         return {
             datalist: [
@@ -37,9 +53,9 @@ export default {
                     {
                         title: '用户信息',
                         thumb: '',
-                        isshow: false,
+                        url: '/client',
                         subitem: [
-                            {title: '基础信息',url: './baseInfo'}
+                            {title: '基础信息',url: '/client/baseInfo'}
                         ]
                     }
                 ],
@@ -47,14 +63,12 @@ export default {
                     {
                          title: '商品类目',
                          thumb: '',
-                         isshow: false,
-                         url: './goodsManage',
+                         url: '/goodsManage/goodsManage',
                          subitem:[]
                     },
                     {
                         title: '商品管理',
                         thumb: '',
-                        isshow: false,
                         subitem: [
                             {title: '出售中的商品'},
                             {title: '已下架的商品'},
@@ -65,7 +79,6 @@ export default {
                     {
                         title: '方案管理',
                         thumb: '',
-                        isshow: false,
                         subitem: [
                             {title: '方案已上架'},
                             {title: '方案已下架'},
@@ -75,7 +88,6 @@ export default {
                     {
                         title: '商城配置',
                         thumb: '',
-                        isshow: false,
                         subitem: [
                             {title: '税收分类配置'}
                         ]
@@ -85,37 +97,31 @@ export default {
                     {
                         title: '成品订单',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '定制订单',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '配套订单',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '饰品订单',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '代金券订单',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '流水管理',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     }
                 ],
@@ -123,13 +129,11 @@ export default {
                     {
                         title: '活动折扣',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '赠品管理',
                         thumb: '',
-                        isshow: false,
                         subitem:[
                             {title: '赠品信息'},
                             {title: '满赠配置'},
@@ -139,13 +143,11 @@ export default {
                     {
                         title: '充值活动',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '营销规则',
                         thumb: '',
-                        isshow: false,
                         subitem:[
                             {title: '红包配置'},
                             {title: '代金券配置'},
@@ -155,25 +157,21 @@ export default {
                     {
                         title: '限时抢购',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '热门拼团',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '爆品管理',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     },
                     {
                         title: '银行管理',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
                     }
                 ],
@@ -181,15 +179,38 @@ export default {
                     {
                         title: '小区管理',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
+                    }
+                ],
+                [
+                    {
+                        title: '供应管理',
+                        thumb: '',
+                        subitem:[
+                            {title: '供应商信息'}
+                        ]
+                    },
+                    {
+                        title: '仓库管理',
+                        thumb: '',
+                        subitem:[
+                            {title: '仓库信息'}
+                        ]
+                    },
+                    {
+                        title: '采购购理',
+                        thumb: '',
+                        url: '/provideManage',
+                        subitem:[
+                            {title: '提货单', url: '/provideManage/deliveryOrder'},
+                            {title: '提货需求池', url: '/provideManage/deliveryDemand'}
+                        ]
                     }
                 ],
                 [
                     {
                         title: '组织架构',
                         thumb: '',
-                        isshow: false,
                         subitem:[
                             {title: '部门管理'},
                             {title: '员工管理'}
@@ -198,7 +219,6 @@ export default {
                     {
                         title: '权限管理',
                         thumb: '',
-                        isshow: false,
                         subitem:[
                             {title: '权限管理'},
                             {title: '角色管理'},
@@ -208,7 +228,6 @@ export default {
                     {
                         title: '系统日志',
                         thumb: '',
-                        isshow: false,
                         subitem:[
                             {title: '登录日志'},
                             {title: '后台操作日志'},
@@ -218,7 +237,6 @@ export default {
                     {
                         title: '系统配置',
                         thumb: '',
-                        isshow: false,
                         subitem:[
                             {title: '系统参数'},
                             {title: '数据字典'},
@@ -229,39 +247,10 @@ export default {
                     {
                         title: '营业区域',
                         thumb: '',
-                        isshow: false,
                         subitem:[]
-                    }
-                ],
-                [
-                    {
-                        title: '供应管理',
-                        thumb: '',
-                        isshow: false,
-                        subitem:[
-                            {title: '供应商信息'}
-                        ]
-                    },
-                    {
-                        title: '仓库管理',
-                        thumb: '',
-                        isshow: false,
-                        subitem:[
-                            {title: '仓库信息'}
-                        ]
-                    },
-                    {
-                        title: '采购购理',
-                        thumb: '',
-                        isshow: false,
-                        subitem:[
-                            {title: '提货单', url: '/provideManage/deliveryOrder'},
-                            {title: '提货需求池', url: '/provideManage/deliveryDemand'}
-                        ]
                     }
                 ]
             ],
-            currentInex: 0
         }
     },
     methods: {
@@ -279,7 +268,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['navindex'])
+        ...mapState(['navIndex'])
     }
 }
 </script>

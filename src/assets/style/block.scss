@@ -38,3 +38,14 @@
   border-bottom: 1px solid #eee;
   white-space: nowrap;
 }
+
+.block-page {
+  position: fixed;
+  bottom: 0;
+  right: 60px;
+  z-index: 500;
+  padding: 10px 30px;
+  .el-pagination {
+    height: 50px;
+  }
+}
